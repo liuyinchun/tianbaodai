@@ -84,23 +84,16 @@ class Login(unittest.TestCase):
             time.sleep(2)
             exist = True
         except:
-            pass
-        self.assertEqual(exist,True)         #判断是否存在退出按钮,不存在则fail
-
-
-
-
-        '''
-
-            #获取当前用例文件名作为截图名
             pic_name = list(os.path.basename(__file__).split('.'))[0]
             #调用截图方法
             getScreen(self,pic_name)
             #写入日志
             logger=Logger(logname='log.txt',loglevel="INFO",logger="test_login.py").getlog()
-            logger.error(e)
+            logger.error(traceback.format_exc())
+            pass
+        self.assertEqual(exist,True)         #判断是否存在退出按钮,不存在则fail
 
-          '''
+
 
 if __name__ == '__main__':
     unittest.main()
