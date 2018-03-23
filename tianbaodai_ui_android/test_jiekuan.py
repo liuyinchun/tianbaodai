@@ -1,66 +1,61 @@
 #!/usr/bin/env python
 #-*-coding:utf-8-*-
-
-#!/usr/bin/env python
-#-*-coding:utf8-*-
+'''
+author:liuyinchun
+datetime:2018/3/23
+'''
 import os
+import traceback
 import unittest,time
-from .method import StartApp, getScreen
-from .method import inputText,slideApplyBar,is_resultActivity,Params
+from .method import StartApp, get_current_function_name
+from .method import slideApplyBar,is_resultActivity,Params
 from common.initlogin import *
-
+from common.get_screen import getScreen
+from common.input_text import inputText
 from common.logger import Logger
+from common import initlogin
 
 class JieKuan(unittest.TestCase):
 
     def setUp(self):
         StartApp(self)    #启动app
-        init_login(self)  #登录
+        initlogin.init_login(self)         #执行登录
     def tearDown(self):
-        init_logout(self)  #退出
         self.driver.quit()
     def test_JieKuan3(self):
-
         u"""借款-3期"""
         params = Params()
+        print("*************执行借款用例**************")
+        self.driver.find_element_by_id('tv_apply').click()            #点击马上申请
+        time.sleep(3)
         try:
-            #点击马上申请
-            self.driver.find_element_by_id('tv_apply').click()
-            time.sleep(3)
-            #滑动借款条到500
-            slideApplyBar(self)
-            #选择借款场景:家用电器
-            self.driver.find_element_by_id('rl_borrow_sence').click()
-            self.driver.find_element_by_id('tv_sence').click()
-            #借款周期
-            self.driver.find_element_by_id('rl_num_periods').click()
-            #选了分3期的
-            self.driver.find_element_by_id('tv_sence').click()
-            time.sleep(5)
-            #获取借款额度
-            edu = self.driver.find_element_by_id('com.ibeesaas.tianbaodai:id/tv_borrow_num').text
+            slideApplyBar(self)                #滑动借款条到500
+            self.driver.find_element_by_id('rl_borrow_sence').click()       #选择借款场景
+            self.driver.find_element_by_id('tv_sence').click()                #家用电器
+            self.driver.find_element_by_id('rl_num_periods').click()          #借款周期
+            self.driver.find_element_by_id('tv_sence').click()                 #选了分3期的
+            time.sleep(8)
+            edu = self.driver.find_element_by_id('tv_borrow_num').text      #获取借款额度
             num_edu = int(edu)
             if num_edu>=500:
-                #点击马上借
-                self.driver.find_element_by_id('tv_borrow_immedia').click()
+                self.driver.find_element_by_id('tv_borrow_immedia').click()       #点击马上借
                 time.sleep(3)
-                #加了延时输入
-                inputText(self,params['applyPwd'])
+                inputText(self,params['applyPwd'])         #输入支付密码,加了延时输入
                 time.sleep(8)
-                #判断是否成功
-                is_resultActivity(self)
+                exist = is_resultActivity(self)                #判断是否成功跳转到借款成功页
             else:
                 exist = False
+                self.driver.find_element_by_id('tv_borrow_immedia').click()       #点击马上借
                 print(u"额度小于500,无法借款")
-        except Exception as e:
+        except:
             exist = False
-            #获取当前用例文件名作为截图名
-            pic_name = list(os.path.basename(__file__).split('.'))[0]
+            #获取当前方法名作为截图名
+            pic_name = get_current_function_name()
             #调用截图方法
             getScreen(self,pic_name)
             #写入日志
-            logger=Logger(logname='log.txt',loglevel="INFO",logger="test_login.py").getlog()
-            logger.error(e)
+            logger=Logger(logname='log.txt',loglevel="INFO",logger=pic_name).getlog()
+            logger.error(traceback.format_exc())
         self.assertEqual(exist,True)
 
     def test_JieKuan6(self):
@@ -69,61 +64,72 @@ class JieKuan(unittest.TestCase):
         #点击马上申请
         self.driver.find_element_by_id('tv_apply').click()
         time.sleep(3)
-        #滑动借款条到500
-        slideApplyBar(self)
-        #选择借款场景:家用电器
-        self.driver.find_element_by_id('rl_borrow_sence').click()
-        self.driver.find_element_by_id('tv_sence').click()
-        #借款周期
-        self.driver.find_element_by_id('rl_num_periods').click()
-         #选了分6期的
-        self.driver.find_element_by_xpath('//android.widget.ListView/android.widget.LinearLayout[2]/android.widget.TextView').click()
-        time.sleep(5)
-        #点击马上借
-        edu = self.driver.find_element_by_id('com.ibeesaas.tianbaodai:id/tv_borrow_num').text
-        num_edu = int(edu)
-        if num_edu>=500:
-            self.driver.find_element_by_id('tv_borrow_immedia').click()
-            time.sleep(3)
-            #加了延时输入
-            inputText(self,params['applyPwd'])
+        try:
+            slideApplyBar(self)          #滑动借款条到500
+            self.driver.find_element_by_id('rl_borrow_sence').click()      #选择借款场景
+            self.driver.find_element_by_id('tv_sence').click()              #家用电器
+            self.driver.find_element_by_id('rl_num_periods').click()        #借款周期
+            self.driver.find_element_by_xpath('//android.widget.ListView/android.widget.LinearLayout[2]/android.widget.TextView').click()     #选了分6期的
             time.sleep(8)
-            #判断是否成功
-            is_resultActivity(self)
-        else:
+            edu = self.driver.find_element_by_id('com.ibeesaas.tianbaodai:id/tv_borrow_num').text     #获取额度
+            num_edu = int(edu)
+            if num_edu>=500:
+                self.driver.find_element_by_id('tv_borrow_immedia').click()    #点击马上借
+                time.sleep(3)
+                inputText(self,params['applyPwd'])                 #加了延时输入
+                time.sleep(8)
+                exist = is_resultActivity(self)                #判断是否成功跳转到借款成功页
+            else:
+                exist = False
+                self.driver.find_element_by_id('tv_borrow_immedia').click()    #点击马上借
+                print(u"额度小于500,无法借款")
+        except:
             exist = False
-            print(u"额度小于500,无法借款")
+            #获取当前方法作为截图名
+            pic_name = get_current_function_name()
+            #调用截图方法
+            getScreen(self,pic_name)
+            #写入日志
+            logger=Logger(logname='log.txt',loglevel="INFO",logger=pic_name).getlog()
+            logger.error(traceback.format_exc())
         self.assertEqual(exist,True)
+
     def test_JieKuan12(self):
         u"""借款-12期"""
         params = Params()
         #点击马上申请
         self.driver.find_element_by_id('tv_apply').click()
         time.sleep(3)
-        #滑动借款条到500
-        slideApplyBar(self)
-        #选择借款场景:家用电器
-        self.driver.find_element_by_id('rl_borrow_sence').click()
-        self.driver.find_element_by_id('tv_sence').click()
-        #借款周期
-        self.driver.find_element_by_id('rl_num_periods').click()
-        #选了分12期的
-        self.driver.find_element_by_xpath('//android.widget.ListView/android.widget.LinearLayout[3]/android.widget.TextView').click()
-        time.sleep(5)
-        #点击马上借
-        edu = self.driver.find_element_by_id('com.ibeesaas.tianbaodai:id/tv_borrow_num').text
-        num_edu = int(edu)
-        if num_edu>=500:
-          self.driver.find_element_by_id('tv_borrow_immedia').click()
-          time.sleep(3)
-          #加了延时输入
-          inputText(self,params['applyPwd'])
-          time.sleep(8)
-          #判断跳转到结果页
-          is_resultActivity(self)
-        else:
+        try:
+            slideApplyBar(self)                   #滑动借款条到500
+            self.driver.find_element_by_id('rl_borrow_sence').click()              #选择借款场景:家用电器
+            self.driver.find_element_by_id('tv_sence').click()
+            self.driver.find_element_by_id('rl_num_periods').click()              #借款周期
+            self.driver.find_element_by_xpath('//android.widget.ListView/android.widget.LinearLayout[3]/android.widget.TextView').click()       #选了分12期的
+            time.sleep(8)
+            edu = self.driver.find_element_by_id('com.ibeesaas.tianbaodai:id/tv_borrow_num').text     #获取额度
+            num_edu = int(edu)
+            if num_edu>=500:
+                self.driver.find_element_by_id('tv_borrow_immedia').click()    #点击马上借
+                time.sleep(3)
+                inputText(self,params['applyPwd'])                 #加了延时输入
+                time.sleep(8)
+                exist = is_resultActivity(self)                #判断是否成功跳转到借款成功页
+            else:
+                exist = False
+                self.driver.find_element_by_id('tv_borrow_immedia').click()    #点击马上借
+                print(u"额度小于500,无法借款")
+        except:
             exist = False
-            print(u"额度小于500,无法借款")
+            #获取方法名作为截图名
+            pic_name = get_current_function_name()
+            #调用截图方法
+            getScreen(self,pic_name)
+            #写入日志
+            logger=Logger(logname='log.txt',loglevel="INFO",logger=pic_name).getlog()
+            logger.error(traceback.format_exc())
         self.assertEqual(exist,True)
+
+
 if __name__ == '__main__':
     unittest.main()

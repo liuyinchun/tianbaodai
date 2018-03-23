@@ -1,6 +1,8 @@
-#!/usr/bin/env python
-#-*-coding:utf-8-*-
-
+'''
+author:liuyinchun
+datetime:2018/3/23
+'''
+import inspect
 import os,time
 import sys
 from appium import webdriver
@@ -53,30 +55,10 @@ def Params():
     }
     return params
 
+#=============================获取方法名=================================
+def get_current_function_name():
 
-
-
-#==============================截  图=======================================
-
-def getScreen(self,pic_name):
-    #绝对路径
-    #f = list(sys.argv[0].split('.'))[0]  #获取当前脚本目录名,不带文件名
-    #文件名
-    #f1 = os.path.realpath(__file__)     #获取当前脚本目录全名,带文件名
-    #f2 = os.path.basename(__file__)     #获取当前脚本文件名
-
-    #在执行所有用例时都需要粘贴,
-    #pic_name = list(os.path.basename(__file__).split('.'))[0]    #获取脚本文件名,不带后缀  作为图片名
-
-
-    filePath = os.path.split(os.path.realpath(sys.argv[0]))[0]    #获取当前脚本目录名上一级 输出G:liu/tianbaodai
-
-    filename = filePath+"\\getscreen\\"+pic_name+".png"   #拼接图片路径
-
-    self.driver.get_screenshot_as_file(filename)       #截图并保存
-
-
-
+    return inspect.stack()[1][3]
 
 
 #===============================滑动借款额度条================================
@@ -97,107 +79,17 @@ def slideApplyBar(self):
     self.driver.tap([(0,y1),(x1,y1)],100)
 
 #===============================判断用例是否跳转===========================
-#判断是否跳转到了登录页
-def is_loginActivity(self):
-    ac_result = self.driver.current_activity
-    if ac_result == ".view.LoginActivity":
-        exist = True
-    else:
-        print("已登录")
-        exist = False
-    return exist
+
 #借款还款后页面是否跳转到结果页,若跳转说明成功
 def is_resultActivity(self):
     #获取当前页面activity
     ac_result = self.driver.current_activity
     if ac_result == ".view.LoanOrRepaymentResultActivity":
-        exist = True
+        return True
     else:
         print("未跳转到结果页")
-        exist = False
-    return exist
+        return False
 
 
-
-#===============================键盘输入================================
-
-#键盘输入某值
-def enterText(self,text):
-    key=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    keyCode=['7','8','9','10','11','12','13','14','15','16','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54']
-    for k in range(len(key)):
-        if text == key[k]:
-            # print key[k], keyCode[k]
-            #键盘输入
-            self.driver.press_keycode(keyCode[k])
-            time.sleep(2)
-        else:
-            pass
-#与上面的方法配合使用,可以输入一个字符串值
-def inputText(self,text):
-    li = list(text)
-    for i in li:
-        enterText(self,i)
-
-
-
-
-
-
-#================================滑动屏幕=================================
-#获得机器屏幕大小x,y
-def getSize(self):
-    x = self.driver.get_window_size()['width']
-    y = self.driver.get_window_size()['height']
-    return (x, y)
-#屏幕向上滑动
-def swipeUp(self,t):
-    l = getSize(self)
-    x1 = int(l[0] * 0.5)
-    #x坐标
-    y1 = int(l[1] * 0.75)
-    #起始y坐标
-    y2 = int(l[1] * 0.25)
-    #终点y坐标
-    self.driver.swipe(x1, y1, x1, y2,t)
-#屏幕向下滑动
-def swipeDown(self,t):
-    l = getSize(self)
-    x1 = int(l[0] * 0.5)
-    y1 = int(l[1] * 0.25)
-    y2 = int(l[1] * 0.75)
-    self.driver.swipe(x1, y1, x1, y2,t)
-#屏幕向左滑动
-def swipLeft(self,t):
-    l=getSize(self)
-    x1=int(l[0]*0.75)
-    y1=int(l[1]*0.5)
-    x2=int(l[0]*0.05)
-    self.driver.swipe(x1,y1,x2,y1,t)
-#屏幕向右滑动
-def swipRight(self,t):
-    l=getSize(self)
-    x1=int(l[0]*0.05)
-    y1=int(l[1]*0.5)
-    x2=int(l[0]*0.75)
-    self.driver.swipe(x1,y1,x2,y1,t)
-#调用向左滑动
-#swipLeft(1000)
-#time.sleep(3)
-#调用向右滑动
-#swipRight(1000)
-#调用向上滑动
-#swipeUp(1000)
-#调用向下滑动
-#swipeDown(1000)
-
-
-#========================清除文本框内容=================
-def deleView(self,text):
-    self.driver.sendKeyEvent(123);             #123：光标移动到输入框最右边
-    i=0
-    if i < text.length():
-       i = i+1
-       self.driver.sendKeyEvent(67)             #67：delete键
 
 

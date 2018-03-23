@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 #-*-coding:utf8-*-
-
+'''
+author:liuyinchun
+datetime:2018/3/23
+'''
 import unittest,time,os
 from email import charset
 import smtplib
@@ -8,9 +11,8 @@ import HTMLTestRunner
 from email.mime.text import MIMEText
 from email.header import Header
 
-
 #导入用例
-from tianbaodai_ui_android import test_login,test_exit,test_addcard,test_huankuan,test_jiekuan,test_register,test_updatepwd,test_reset_pwd
+from tianbaodai_ui_android import test_login,test_addcard,test_huankuan,test_jiekuan,test_regist,test_updatepwd,test_reset_pwd
 
 #添加用例集
 suite = unittest.TestSuite()
@@ -18,7 +20,7 @@ suite = unittest.TestSuite()
 #==============================执行用例=======================
 
 #注册
-#suite.addTest(unittest.makeSuite(test_register.Register))
+#suite.addTest(unittest.makeSuite(test_regist.Register))
 
 #忘记密码
 #suite.addTest(unittest.makeSuite(test_reset_pwd.ResetPWD))
@@ -38,10 +40,7 @@ suite.addTest(unittest.makeSuite(test_login.Login))
 #修改密码
 #suite.addTest(unittest.makeSuite(test_updatepwd.Updatepwd))
 
-#退出
-#suite.addTest(unittest.makeSuite(test_exit.Exit))
 
-'''
 #执行用例
 runner = unittest.TextTestRunner()
 runner.run(suite)
@@ -90,4 +89,4 @@ if __name__ == '__main__':
     runResult=runner.run(suite)#执行测试，调用测试套件返回结果
     fp.close()#关闭文件，打开文件后一定要关闭文件，否则会占用资源。
     sendReport(filePath)
-
+'''

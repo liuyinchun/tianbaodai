@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 #获取操作系统的库
+import inspect
 import logging
 import os
 import platform
@@ -23,7 +24,7 @@ cmd = 'adb devices'
 sub = subprocess.getoutput(cmd)
 s = sub.split("\n")[1]
 #返回值为string
-print(s)
+#print(s)
 #print(type(sub))
 
 #-a 是指监听的ip
@@ -35,7 +36,7 @@ print(s)
 #start_appium = 'cmd'
 #appium = subprocess.getoutput(start_appium)
 #print(appium)
-
+'''
 class Sp:
     def __init__(self, device):
         self.device = device
@@ -74,19 +75,22 @@ class Sp:
         return self.start_appium()
 
     def stop_appium(self):
-        '''
+
         停止appium
         :return:
-        '''
+
         if platform.system() == 'Windows':
             os.popen("taskkill /f /im node.exe")
 
 
 
-'''
+
 if __name__ == '__main__':
     s = Sp(s)
     s.main()
 '''
+
+
+
 
 

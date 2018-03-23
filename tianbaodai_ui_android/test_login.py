@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 #-*-coding:utf8-*-
+'''
+author:liuyinchun
+datetime:2018/3/23
+'''
 
 import unittest
 from appium import webdriver
@@ -10,14 +14,16 @@ import logging.config
 from common.logger import Logger
 import traceback
 from common.initlogin import *
+from common.get_screen import getScreen
 
 class Login(unittest.TestCase):
     def setUp(self):
         StartApp(self)
-        print("*************执行登录用例**************")
+        init_logout(self)        #先退出登录
     def tearDown(self):
         self.driver.quit()
     '''
+    1, 先退出登录(如果未登录,略过)
     2, 首页进入个人中心页
     3、进入登陆界面
     4、点击忘记密码
@@ -32,9 +38,10 @@ class Login(unittest.TestCase):
     '''
     def test_Login(self):
         u"""登录"""
+        print("*************执行登录用例**************")
+        self.driver.find_element_by_id("iv_head").click()   #点击头像到个人中心页
+        time.sleep(2)
         try:
-            init_logout(self)       #退出登录
-            time.sleep(2)
             self.driver.find_element_by_id("rl_top").click()      #点击个人中心页中的登录,跳转到登录页
             time.sleep(2)
             self.driver.find_element_by_id("tv_forgetpwd").click()  #点击忘记密码
@@ -45,20 +52,20 @@ class Login(unittest.TestCase):
             time.sleep(2)
             self.driver.find_element_by_id("tv_regist_login").click()     #点击立即登录,返回到登录页
             time.sleep(2)
-            #输入手机号,不输入密码
-            self.driver.find_element_by_id("et_phonenum").send_keys("18310141768")
-            self.driver.find_element_by_id("tv_login").click()     #输入手机号,不输入密码
+
+            self.driver.find_element_by_id("et_phonenum").send_keys("18310141768")     #输入手机号,不输入密码
+            self.driver.find_element_by_id("tv_login").click()     #点击登录
             time.sleep(2)
             #输入任意手机号,任意密码
-            self.driver.find_element_by_id("et_phonenum").send_keys("18310141760")
+            self.driver.find_element_by_id("et_phonenum").send_keys("18310141760")    #输入任意手机号,任意密码
             self.driver.find_element_by_id("et_pwd").send_keys("121212")
-            self.driver.find_element_by_id("tv_login").click()          #输入任意手机号,任意密码
-            time.sleep(2)
-            #输入正确手机号,错误密码
-            self.driver.find_element_by_id("et_phonenum").send_keys("18310141768")
+            self.driver.find_element_by_id("tv_login").click()          #点击登录
+            time.sleep(5)
+
+            self.driver.find_element_by_id("et_phonenum").send_keys("18310141768")   #输入正确手机号,错误密码
             self.driver.find_element_by_id("et_pwd").send_keys("121212")
-            self.driver.find_element_by_id("tv_login").click()         #输入正确手机号,错误密码
-            time.sleep(2)
+            self.driver.find_element_by_id("tv_login").click()          #点击登录
+            time.sleep(5)
             #输入正确登录数据
             params = Params()
             self.driver.find_element_by_id("et_phonenum").send_keys(params['phone'])
@@ -67,31 +74,22 @@ class Login(unittest.TestCase):
                 self.driver.find_element_by_id("et_imgpwd").send_keys(params[ 'image_yzm'])    #输入图形验证码
             except:
                 pass
-            #self.driver.find_element_by_id("tv_login").click()   #输入正确数据登录
-            time.sleep(2)
-        except:
-            #print(traceback.format_exc())
-            pic_name = list(os.path.basename(__file__).split('.'))[0]
-            #调用截图方法
-            getScreen(self,pic_name)
-            #写入日志
-            logger=Logger(logname='log.txt',loglevel="INFO",logger="test_login.py").getlog()
-            logger.error(traceback.format_exc())
-        exist = False
-        #判断是否存在退出按钮,以此推断是否登录成功
-        try:
+            self.driver.find_element_by_id("tv_login").click()    #点击登录
+            time.sleep(5)
             self.driver.find_element_by_name('退出登录').click()      #点击个人中心页中退出按钮
             time.sleep(2)
             exist = True
         except:
-            pic_name = list(os.path.basename(__file__).split('.'))[0]
+            exist = False
+            #print(traceback.format_exc())
+            #pic_name = list(os.path.basename(__file__).split('.'))[0]
+            pic_name = get_current_function_name()
             #调用截图方法
             getScreen(self,pic_name)
             #写入日志
-            logger=Logger(logname='log.txt',loglevel="INFO",logger="test_login.py").getlog()
+            logger=Logger(logname='log.txt',loglevel="INFO",logger=pic_name).getlog()
             logger.error(traceback.format_exc())
-            pass
-        self.assertEqual(exist,True)         #判断是否存在退出按钮,不存在则fail
+        self.assertEqual(exist,True)         #登录失败
 
 
 

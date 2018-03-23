@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 #-*-coding:utf-8-*-
+'''
+author:liuyinchun
+datetime:2018/3/23
+'''
 import HTMLTestRunner
 import os
 import smtplib
