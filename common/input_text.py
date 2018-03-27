@@ -17,7 +17,7 @@ def enterText(self,text):
             # print key[k], keyCode[k]
             #键盘输入
             self.driver.press_keycode(keyCode[k])
-            time.sleep(2)
+            time.sleep(5)
         else:
             pass
 #与上面的方法配合使用,可以输入一个字符串值

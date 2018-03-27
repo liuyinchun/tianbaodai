@@ -33,12 +33,14 @@ class ResetPWD(unittest.TestCase):
             self.driver.find_element_by_id('tv_queren_reset').click()          #点击确认重置
             time.sleep(2)
 
-            self.driver.find_element_by_id('et_phonenum').send_keys(params['phone'])   #输入手机号,其他不输入
+            self.driver.find_element_by_id('et_phonenum').send_keys(params['phone'])   #输入手机号
             self.driver.find_element_by_id('tv_getAuthCode').click()    #获取短信验证码
             sms_yanzhengma = input("请输入短信验证码:")                 #手动输入
             time.sleep(8)
             self.driver.find_element_by_id('et_authcode').send_keys(sms_yanzhengma)   #脚本自动输入短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id('et_pwd').send_keys(params['loginPWD'])               #输入密码
+            time.sleep(2)
             self.driver.find_element_by_id('et_queren_pwd').send_keys("111111")      #再次输入密码不一致
             self.driver.find_element_by_id('tv_queren_reset').click()          #点击确认重置
 
@@ -48,7 +50,9 @@ class ResetPWD(unittest.TestCase):
             sms_yanzhengma = input("请输入短信验证码:")                 #手动输入
             time.sleep(8)
             self.driver.find_element_by_id('et_authcode').send_keys(sms_yanzhengma)   #脚本自动输入短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id('et_pwd').send_keys(params['loginPWD'])               #输入密码
+            time.sleep(2)
             self.driver.find_element_by_id('et_queren_pwd').send_keys(params['loginPWD'])      #再次输入密码
             self.driver.find_element_by_id('tv_queren_reset').click()          #点击确认重置
 

@@ -7,7 +7,7 @@ datetime:2018/3/23
 from appium import webdriver
 import time
 
-from tianbaodai_ui_android.method import Params
+from tianbaodai_ui.method import Params
 
 #未登录时登录
 def init_login(self):

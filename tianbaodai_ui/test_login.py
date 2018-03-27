@@ -22,20 +22,7 @@ class Login(unittest.TestCase):
         init_logout(self)        #先退出登录
     def tearDown(self):
         self.driver.quit()
-    '''
-    1, 先退出登录(如果未登录,略过)
-    2, 首页进入个人中心页
-    3、进入登陆界面
-    4、点击忘记密码
-    5、点击返回到手机号登陆界面
-    6、点击注册，点击返回到手机号登陆界面
-    7、什么都不输入，点击登陆
-    8、输入任意手机号，点击登陆
-    9、输入任意手机号，和任意密码，点击登陆
-    10、输入正确手机号和错误密码，点击登陆
-    11、输入正确手机号和正确密码点击登陆，进入到首页
-    12、退出登陆，回到个人中心页
-    '''
+
     def test_Login(self):
         u"""登录"""
         print("*************执行登录用例**************")
@@ -63,12 +50,14 @@ class Login(unittest.TestCase):
             time.sleep(5)
 
             self.driver.find_element_by_id("et_phonenum").send_keys("18310141768")   #输入正确手机号,错误密码
+            self.driver.find_element_by_id("iv_pwd_delete").click()          #清空一下
             self.driver.find_element_by_id("et_pwd").send_keys("121212")
             self.driver.find_element_by_id("tv_login").click()          #点击登录
             time.sleep(5)
             #输入正确登录数据
             params = Params()
             self.driver.find_element_by_id("et_phonenum").send_keys(params['phone'])
+            self.driver.find_element_by_id("iv_pwd_delete").click()         #清空一下
             self.driver.find_element_by_id("et_pwd").send_keys(params['loginPWD'])
             try:
                 self.driver.find_element_by_id("et_imgpwd").send_keys(params[ 'image_yzm'])    #输入图形验证码
@@ -81,8 +70,6 @@ class Login(unittest.TestCase):
             exist = True
         except:
             exist = False
-            #print(traceback.format_exc())
-            #pic_name = list(os.path.basename(__file__).split('.'))[0]
             pic_name = get_current_function_name()
             #调用截图方法
             getScreen(self,pic_name)

@@ -31,7 +31,7 @@ class AddCard(unittest.TestCase):
         try:
             self.driver.find_element_by_id("tv_addBankCard").click()       #点击添加银行卡按钮
             time.sleep(2)
-            self.driver.find_element_by_id("et_cardusername").send_keys("刘银春")     #输入持卡人姓名
+            self.driver.find_element_by_id("et_cardusername").send_keys(params['username'])     #输入持卡人姓名
             self.driver.find_element_by_id("et_idnum").send_keys(params['ID'])      #输入身份证号
             self.driver.find_element_by_id("et_bankcardnum").click()             #输入银行卡号,4位一个空格
             inputText(self,params['cardNumber'])            #调用了延时方法输入

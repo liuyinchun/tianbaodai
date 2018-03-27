@@ -11,8 +11,11 @@ import HTMLTestRunner
 from email.mime.text import MIMEText
 from email.header import Header
 
+os.system('start startAppiumServer.bat')    #启动appium服务
+time.sleep(8)     #等待appium服务启动完毕
+
 #导入用例
-from tianbaodai_ui_android import test_login,test_addcard,test_huankuan,test_jiekuan,test_regist,test_updatepwd,test_reset_pwd
+from tianbaodai_ui import test_login,test_addcard,test_huankuan,test_jiekuan,test_regist,test_updatepwd,test_reset_pwd
 
 #添加用例集
 suite = unittest.TestSuite()
@@ -20,13 +23,13 @@ suite = unittest.TestSuite()
 #==============================执行用例=======================
 
 #注册
-#suite.addTest(unittest.makeSuite(test_regist.Register))
+suite.addTest(unittest.makeSuite(test_regist.Register))
 
 #忘记密码
-#suite.addTest(unittest.makeSuite(test_reset_pwd.ResetPWD))
+suite.addTest(unittest.makeSuite(test_reset_pwd.ResetPWD))
 
 #登录
-suite.addTest(unittest.makeSuite(test_login.Login))
+#suite.addTest(unittest.makeSuite(test_login.Login))
 
 #添加银行卡
 #suite.addTest(unittest.makeSuite(test_addcard.AddCard))
@@ -44,6 +47,8 @@ suite.addTest(unittest.makeSuite(test_login.Login))
 #执行用例
 runner = unittest.TextTestRunner()
 runner.run(suite)
+
+os.system('start stopAppiumServer.bat')     #关闭appium服务
 
 '''
 #==============生成测试报告=============

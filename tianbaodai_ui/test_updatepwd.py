@@ -40,7 +40,9 @@ class Updatepwd(unittest.TestCase):
             time.sleep(2)
             #正常情况
             self.driver.find_element_by_id("et_originpwd").send_keys(params['loginPWD'])   # #输入原密码
+            time.sleep(2)
             self.driver.find_element_by_id("et_pwd").send_keys(params['loginPWD'])    #输入新密码
+            time.sleep(2)
             self.driver.find_element_by_id("et_queren_pwd").send_keys(params['loginPWD'])   #再次输入新密码
             self.driver.find_element_by_id("tv_confimchange").click()   #点击确认修改
             time.sleep(2)

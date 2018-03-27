@@ -28,8 +28,8 @@ def StartApp(self):
     #可以获取toast弹窗消息----此方法没用
     #desired_caps['automationName'] =  'Uiautomator2'
     #隐藏键盘/中文编码方式
-    #desired_caps['resetKeyboard'] = True
-    #desired_caps['unicodeKeyboard'] = True
+    desired_caps['resetKeyboard'] = True
+    desired_caps['unicodeKeyboard'] = True
     #启动app
     self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub',desired_caps)
     self.driver.wait_activity(".view.MainActivity", 10)

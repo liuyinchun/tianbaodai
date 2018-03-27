@@ -29,7 +29,12 @@ class Register(unittest.TestCase):
         self.driver.find_element_by_id("rl_top").click()      #点击个人中心页中的登录,跳转到登录页
         time.sleep(2)
         try:
-            self.driver.find_element_by_id("tv_regist").click()
+            self.driver.find_element_by_id("tv_regist").click()         #点击注册按钮,跳转到注册页
+            time.sleep(2)
+            self.driver.find_element_by_id("tv_regist_login").click()       #点击注册页中的立即登录,跳转到登录
+            time.sleep(2)
+            self.driver.find_element_by_id("tv_regist").click()          #再点击注册
+            time.sleep(2)
             #异常情况
             self.driver.find_element_by_id("tv_getAuthCode").click()     #不输入手机号,点击获取短信验证码
             time.sleep(2)
@@ -46,16 +51,22 @@ class Register(unittest.TestCase):
 
             self.driver.find_element_by_id("et_phonenum").send_keys(params['phone'])      #输入手机号
             self.driver.find_element_by_id("tv_getAuthCode").click()                      #点击获取短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_authcode").send_keys(params['sms_yzm'])   #输入通用短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_imgpwd").send_keys("123123")              #输入错误图形验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_pwd").send_keys(params['loginPWD'])       #输入密码
             self.driver.find_element_by_id("tv_regist").click()    #点击注册
             time.sleep(2)
 
             self.driver.find_element_by_id("et_phonenum").send_keys(params['phone'])       #输入手机号
             self.driver.find_element_by_id("tv_getAuthCode").click()                       #点击获取短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_authcode").send_keys("123")                #输入错误短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_imgpwd").send_keys(params['image_yzm'])   #输入错误图形验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_pwd").send_keys(params['loginPWD'])       #输入密码
             self.driver.find_element_by_id("tv_regist").click()    #点击注册
             time.sleep(2)
@@ -63,8 +74,11 @@ class Register(unittest.TestCase):
             #输入正确注册信息
             self.driver.find_element_by_id("et_phonenum").send_keys(params['phone'])      #输入手机号
             self.driver.find_element_by_id("tv_getAuthCode").click()                      #点击获取短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_authcode").send_keys(params['sms_yzm'])   #输入通用短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_imgpwd").send_keys(params['image_yzm'])   #输入通用短信验证码
+            time.sleep(2)
             self.driver.find_element_by_id("et_pwd").send_keys(params['loginPWD'])        #输入密码
 
             self.driver.find_element_by_id("tv_regist").click()     #点击注册按钮
